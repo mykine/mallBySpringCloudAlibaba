@@ -1,3 +1,5 @@
+CREATE DATABASE mall_order DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
+
 create table `t_order` (
   `id` bigint unsigned auto_increment comment '主键',
   `order_no` bigint unsigned not null comment '订单号',

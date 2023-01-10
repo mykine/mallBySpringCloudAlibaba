@@ -1,3 +1,5 @@
+CREATE DATABASE mall_goods DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
+
 create table `t_goods` (
   `id` bigint unsigned auto_increment comment '主键',
   `name` varchar(100) not null comment '商品名称',

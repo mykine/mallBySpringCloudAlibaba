@@ -1,3 +1,5 @@
+CREATE DATABASE mall_coupon DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
+
 create table `t_coupon` (
     `id` bigint unsigned auto_increment comment '主键',
     `title` varchar(64) not null comment '优惠券标题',

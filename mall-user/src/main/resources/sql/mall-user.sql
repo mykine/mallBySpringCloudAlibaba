@@ -1,3 +1,5 @@
+CREATE DATABASE mall_user DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
+
 create table `t_user` (
   `id` bigint unsigned auto_increment comment '主键',
   `account` varchar(32) not null comment '账号',
@@ -10,3 +12,4 @@ create table `t_user` (
   primary key pk_id (`id`),
   unique key uk_account(`account`)
 ) engine=innodb default charset=utf8mb4 collate=utf8mb4_unicode_ci comment='用户表';
+

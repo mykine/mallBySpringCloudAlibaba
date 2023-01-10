@@ -2,9 +2,9 @@ spring:
   #通用数据源配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://120.77.173.199:3307/mall-order?useInformationSchema=false&charset=utf8mb4&useSSL=false&allowMultiQueries=true
+    url: jdbc:mysql://192.168.10.98:3306/mall_order?useInformationSchema=false&charset=utf8mb4&useSSL=false&allowMultiQueries=true
     username: root
-    password: 123456
+    password: jyIsTpYmq7%Z
 
 mybatis:
   mapper-locations: classpath:mapping/*Mapper.xml
