@@ -2,12 +2,20 @@ package cn.mykine.mall.common.dto;
 
 
 import cn.mykine.mall.common.base.BaseBean;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 /**
  * 商品信息DTO
  */
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class GoodsDTO extends BaseBean {
 
     /** 商品ID **/
@@ -28,110 +36,4 @@ public class GoodsDTO extends BaseBean {
     /** 商品库存 **/
     private Long stock;
 
-    public GoodsDTO() {
-    }
-
-    private GoodsDTO(Builder builder) {
-        this.id = builder.id;
-        this.name = builder.name;
-        this.description = builder.description;
-        this.type = builder.type;
-        this.price = builder.price;
-        this.stock = builder.stock;
-    }
-
-    public static class Builder {
-
-        private Long id;
-        private String name;
-        private String description;
-        private Integer type;
-        private BigDecimal price;
-        private Long stock;
-
-        public Builder() {
-        }
-
-        public Builder id(Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public Builder name(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public Builder description(String description) {
-            this.description = description;
-            return this;
-        }
-
-        public Builder type(Integer type) {
-            this.type = type;
-            return this;
-        }
-
-        public Builder price(BigDecimal price) {
-            this.price = price;
-            return this;
-        }
-
-        public Builder stock(Long stock) {
-            this.stock = stock;
-            return this;
-        }
-
-        public GoodsDTO build() {
-            return new GoodsDTO(this);
-        }
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public Long getStock() {
-        return stock;
-    }
-
-    public void setStock(Long stock) {
-        this.stock = stock;
-    }
 }

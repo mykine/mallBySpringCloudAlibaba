@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.mykine.mall.goods.mapper.GoodsMapper">
+
+    <resultMap id="BaseResultMap" type="cn.mykine.mall.goods.model.GoodsDO">
+        <result column="id" jdbcType="BIGINT" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="type" jdbcType="TINYINT" property="type" />
+        <result column="price" jdbcType="DECIMAL" property="price" />
+        <result column="stock" jdbcType="BIGINT" property="stock" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    </resultMap>
+
+    <insert id="insertGoods" parameterType="cn.mykine.mall.goods.model.GoodsDO">
+        insert into `mall_goods`.t_goods
+        (
+             name,
+             description,
+             type,
+             price,
+             stock
+        )
+        values
+        (
+             #{name},
+             #{description},
+             #{type},
+             #{price},
+             #{stock}
+        )
+    </insert>
+
+    <select id="selectGoodsById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select *
+          from `mall_goods`.t_goods
+         where id = #{id}
+    </select>
+
+    <select id="pageQueryGoods" parameterType="cn.mykine.mall.common.dto.PageQueryGoodsDTO" resultMap="BaseResultMap">
+        <bind name="pageQueryGoodsOffset" value="(pageNo-1) * pageSize"></bind>
+        select *
+        from `mall_goods`.t_goods
+        where 1 = 1
+            <if test="goodsId!= null">
+            and id = #{goodsId}
+            </if>
+            <if test="name!= null">
+                and name = #{name}
+            </if>
+            order by id desc
+            limit #{pageQueryGoodsOffset},#{pageSize}
+    </select>
+
+    <update id="updateGoodsListStock" parameterType="java.util.List">
+        <foreach collection="list" item="goods" index="index" open="" close="" separator=";">
+            update `mall_goods`.t_goods
+               set stock = stock - #{goods.stock}
+             where id = #{goods.id}
+               and stock >= #{goods.stock}
+        </foreach>
+    </update>
+</mapper>

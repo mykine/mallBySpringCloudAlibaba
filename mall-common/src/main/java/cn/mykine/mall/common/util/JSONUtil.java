@@ -47,7 +47,7 @@ public class JSONUtil {
      * @return
      * @throws JsonProcessingException
      */
-    public String toJSONString(Object object) {
+    public static String toJSONString(Object object) {
         try {
             return mapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
