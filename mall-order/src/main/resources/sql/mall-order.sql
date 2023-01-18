@@ -26,3 +26,21 @@ create table `t_order_item` (
   index idx_order_no(`order_no`),
   index idx_goods_id(`goods_id`)
 ) engine=innodb default charset=utf8mb4 collate=utf8mb4_unicode_ci comment='订单条目表';
+
+## 样本数据
+
+```sql
+USE `mall_order`;
+INSERT INTO `t_order` (`order_no`, `amount`, `status`, `user_id`, `coupon_record_id`) VALUES (1, 848.00, 2, 1, 1);
+INSERT INTO `t_order` (`order_no`, `amount`, `status`, `user_id`, `coupon_record_id`) VALUES (2, 848.00, 2, 2, 2);
+INSERT INTO `t_order` (`order_no`, `amount`, `status`, `user_id`, `coupon_record_id`) VALUES (3, 848.00, 2, 3, 3);
+INSERT INTO `t_order` (`order_no`, `amount`, `status`, `user_id`, `coupon_record_id`) VALUES (4, 848.00, 2, 4, 4);
+INSERT INTO `t_order` (`order_no`, `amount`, `status`, `user_id`, `coupon_record_id`) VALUES (5, 848.00, 2, 5, 5);
+INSERT INTO `t_order` (`order_no`, `amount`, `status`, `user_id`, `coupon_record_id`) VALUES (6, 848.00, 2, 6, 6);
+INSERT INTO `t_order_item` (`order_no`, `goods_id`, `number`, `amount`) VALUES (1, 1, 1, 848.00);
+INSERT INTO `t_order_item` (`order_no`, `goods_id`, `number`, `amount`) VALUES (2, 1, 1, 848.00);
+INSERT INTO `t_order_item` (`order_no`, `goods_id`, `number`, `amount`) VALUES (3, 1, 1, 848.00);
+INSERT INTO `t_order_item` (`order_no`, `goods_id`, `number`, `amount`) VALUES (4, 1, 1, 848.00);
+INSERT INTO `t_order_item` (`order_no`, `goods_id`, `number`, `amount`) VALUES (5, 1, 1, 848.00);
+INSERT INTO `t_order_item` (`order_no`, `goods_id`, `number`, `amount`) VALUES (6, 1, 1, 848.00);
+```

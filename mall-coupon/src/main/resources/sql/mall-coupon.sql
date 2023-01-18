@@ -25,3 +25,17 @@ create table `t_coupon_record` (
    primary key pk_id (`id`),
    index idx_user_id(`user_id`)
 ) engine=innodb default charset=utf8mb4 collate=utf8mb4_unicode_ci comment='优惠券记录表';
+
+
+## 样本数据
+
+```sql
+USE `mall_coupon`;
+INSERT INTO `t_coupon` (`title`, `with_amount`, `used_amount`, `quota`, `take_count`, `used_count`, `status`) VALUES ('全新上线活动', 887.00, 39.00, 994, 6, 1, 1);
+INSERT INTO `t_coupon_record` (`user_id`, `coupon_id`, `status`) VALUES (1, 1, 0);
+INSERT INTO `t_coupon_record` (`user_id`, `coupon_id`, `status`) VALUES (2, 1, 0);
+INSERT INTO `t_coupon_record` (`user_id`, `coupon_id`, `status`) VALUES (3, 1, 0);
+INSERT INTO `t_coupon_record` (`user_id`, `coupon_id`, `status`) VALUES (4, 1, 0);
+INSERT INTO `t_coupon_record` (`user_id`, `coupon_id`, `status`) VALUES (5, 1, 0);
+INSERT INTO `t_coupon_record` (`user_id`, `coupon_id`, `status`) VALUES (6, 1, 1);
+```
