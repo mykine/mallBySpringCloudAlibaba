@@ -1,4 +1,4 @@
-package cn.mykine.mall.goods;
+package cn.mykine.mall.order;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -9,11 +9,11 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
-@MapperScan("cn.mykine.mall.user.mapper")
-public class MallUserApplication {
+@MapperScan("cn.mykine.mall.order.mapper")
+public class MallOrderApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(MallUserApplication.class, args);
+        SpringApplication.run(MallOrderApplication.class, args);
     }
 
 }
