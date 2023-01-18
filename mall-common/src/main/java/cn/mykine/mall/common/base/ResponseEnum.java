@@ -6,7 +6,7 @@ package cn.mykine.mall.common.base;
 public enum ResponseEnum {
 
     /** 基础返回码 **/
-    SUCCESS("0000", "操作成功"),
+    SUCCESS("0000", "交易成功"),
 
     /** 数据库操作异常 **/
     ENTITY_NOT_FOUND("1000", "数据不存在"),
@@ -25,6 +25,8 @@ public enum ResponseEnum {
     COUPON_NOT_ENOUGH("5001", "优惠券已被领取完"),
     COUPON_USED("5002", "优惠券已被使用"),
     COUPON_EXPIRED("5003", "优惠券已过期"),
+
+    SYSTEM_BUSY("8888","系统繁忙"),
 
     /** 程序异常 **/
     FEIGN_CALL_EXCEPTION("9997","远程调用失败"),

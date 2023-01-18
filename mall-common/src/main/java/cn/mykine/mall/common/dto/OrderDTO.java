@@ -1,6 +1,10 @@
 package cn.mykine.mall.common.dto;
 
 import cn.mykine.mall.common.base.BaseBean;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -8,6 +12,10 @@ import java.util.List;
 /**
  * 订单信息DTO
  */
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderDTO extends BaseBean {
 
     /** 订单号 **/
@@ -28,105 +36,4 @@ public class OrderDTO extends BaseBean {
     /** 订单明细列表 **/
     private List<OrderItemDTO> orderItemDTOList;
 
-    public OrderDTO() { }
-
-    private OrderDTO(Builder builder) {
-        this.orderNo = builder.orderNo;
-        this.amount = builder.amount;
-        this.status = builder.status;
-        this.userId = builder.userId;
-        this.couponRecordId = builder.couponRecordId;
-        this.orderItemDTOList = builder.orderItemDTOList;
-    }
-
-    public static class Builder {
-        private Long orderNo;
-        private BigDecimal amount;
-        private Integer status;
-        private Long userId;
-        private Long couponRecordId;
-        private List<OrderItemDTO> orderItemDTOList;
-
-        public Builder orderNo(Long orderNo){
-            this.orderNo = orderNo;
-            return this;
-        }
-
-        public Builder amount(BigDecimal amount) {
-            this.amount = amount;
-            return this;
-        }
-
-        public Builder status(Integer status) {
-            this.status = status;
-            return this;
-        }
-
-        public Builder userId(Long userId) {
-            this.userId = userId;
-            return this;
-        }
-
-        public Builder couponRecordId(Long couponRecordId){
-            this.couponRecordId = couponRecordId;
-            return this;
-        }
-
-        public Builder orderItemDTOList(List<OrderItemDTO> orderItemDTOList) {
-            this.orderItemDTOList = orderItemDTOList;
-            return this;
-        }
-
-        public OrderDTO build() {
-            return new OrderDTO(this);
-        }
-    }
-
-    public Long getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(Long orderNo) {
-        this.orderNo = orderNo;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getCouponRecordId() {
-        return couponRecordId;
-    }
-
-    public void setCouponRecordId(Long couponRecordId) {
-        this.couponRecordId = couponRecordId;
-    }
-
-    public List<OrderItemDTO> getOrderItemDTOList() {
-        return orderItemDTOList;
-    }
-
-    public void setOrderItemDTOList(List<OrderItemDTO> orderItemDTOList) {
-        this.orderItemDTOList = orderItemDTOList;
-    }
 }

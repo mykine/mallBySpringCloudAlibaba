@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
 /**
- * 优惠券信息DTO
+ * 优惠券分页查询参数
  */
 public class PageQueryGoodsDTO extends PageQueryParam {
 
