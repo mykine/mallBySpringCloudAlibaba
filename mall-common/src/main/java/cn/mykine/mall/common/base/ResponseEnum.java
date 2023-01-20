@@ -6,7 +6,7 @@ package cn.mykine.mall.common.base;
 public enum ResponseEnum {
 
     /** 基础返回码 **/
-    SUCCESS("0000", "交易成功"),
+    SUCCESS("0000", "操作成功"),
 
     /** 数据库操作异常 **/
     ENTITY_NOT_FOUND("1000", "数据不存在"),

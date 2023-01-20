@@ -4,9 +4,11 @@ package cn.mykine.mall.order.service.impl;
 import cn.mykine.mall.common.base.BaseResponse;
 import cn.mykine.mall.common.dto.*;
 import cn.mykine.mall.common.util.Assert;
+import cn.mykine.mall.common.util.JSONUtil;
 import cn.mykine.mall.common.util.ObjectTransformer;
 import cn.mykine.mall.order.feign.coupon.CouponFeign;
 import cn.mykine.mall.order.feign.goods.GoodsFeign;
+import cn.mykine.mall.order.feign.user.UserFeign;
 import cn.mykine.mall.order.mapper.OrderItemMapper;
 import cn.mykine.mall.order.mapper.OrderMapper;
 import cn.mykine.mall.order.model.OrderDO;
@@ -32,6 +34,9 @@ public class OrderServiceImpl implements IOrderService {
 
     @Resource
     GoodsFeign goodsFeign;
+
+    @Resource
+    UserFeign userFeign;
 
     /**
      * 下单服务
@@ -107,5 +112,13 @@ public class OrderServiceImpl implements IOrderService {
                 .status(orderDO.getStatus())
                 .build();
         return data;
+    }
+
+    @Override
+    public String order(OrderDTO orderDTO){
+        //查询用户信息
+        BaseResponse<UserDTO> user = userFeign.getUser(orderDTO.getUserId());
+
+        return JSONUtil.toJSONString(user.getData());
     }
 }

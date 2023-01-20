@@ -21,4 +21,6 @@ public interface IOrderService {
 
     List<OrderDTO> orderList(PageQueryOrdersDTO param);
 
+    String order(OrderDTO orderDTO);
+
 }

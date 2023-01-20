@@ -26,10 +26,10 @@ public class OrderController {
      * @return
      */
     @PostMapping("/order")
-    BaseResponse createOrder(@RequestBody OrderDTO orderDTO) {
+    BaseResponse<String> createOrder(@RequestBody OrderDTO orderDTO) {
         //TODO 对 DTO 进行前置校验
-        orderService.createOrder(orderDTO);
-        return BaseResponse.success();
+        String order = orderService.order(orderDTO);
+        return BaseResponse.success(order);
     }
 
 //    /**
