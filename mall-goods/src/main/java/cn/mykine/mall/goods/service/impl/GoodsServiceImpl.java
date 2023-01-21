@@ -13,9 +13,11 @@ import cn.mykine.mall.common.util.ObjectTransformer;
 import cn.mykine.mall.goods.mapper.GoodsMapper;
 import cn.mykine.mall.goods.model.GoodsDO;
 import cn.mykine.mall.goods.service.IGoodsService;
+import cn.mykine.mall.goods.utils.RedisUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import redis.clients.jedis.Jedis;
@@ -26,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +38,9 @@ public class GoodsServiceImpl implements IGoodsService {
 
     @Resource
     GoodsMapper goodsMapper;
+
+    @Resource
+    RedisUtil redisUtil;
 
     @Override
     public boolean addGoods(GoodsDTO goodsDTO) {
@@ -65,21 +71,19 @@ public class GoodsServiceImpl implements IGoodsService {
     @Override
     public GoodsDTO getGoods(Long id) {
         GoodsDO goodsDO = null;
-        try (Jedis jedis = new Jedis("localhost", 6379);) {
+        try {
 
             String cacheKey = String.format(Constants.GOODS_CACHE_KEY, id);
-            String cacheValue = jedis.get(cacheKey);
-            logger.info("key:{}, value:{}", cacheKey, cacheValue);
+            goodsDO = (GoodsDO)redisUtil.get(cacheKey);
+            logger.info("key:{}, value:{}", cacheKey, goodsDO);
 
-            if(StringUtils.isBlank(cacheValue)) {
-
+            if(null==goodsDO) {
                 goodsDO = goodsMapper.selectGoodsById(id);
                 Assert.notNull(goodsDO);
-
-                jedis.set(cacheKey, JSONUtil.toJSONString(goodsDO));
-            } else {
-                goodsDO = JSONUtil.parseObject(cacheValue, GoodsDO.class);
+                redisUtil.set(cacheKey,goodsDO,300);
             }
+        }catch (Exception e){
+            logger.warn("GoodsServiceImpl.getGoods err,id={}",id,e);
         }
         return ObjectTransformer.transform(goodsDO, GoodsDTO.class);
     }

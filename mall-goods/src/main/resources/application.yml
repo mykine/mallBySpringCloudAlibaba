@@ -5,6 +5,20 @@ spring:
     url: jdbc:mysql://192.168.10.98:3306/mall_goods?useInformationSchema=false&charset=utf8mb4&useSSL=false&allowMultiQueries=true
     username: root
     password: jyIsTpYmq7%Z
+  redis:
+    cluster:
+      nodes: 192.168.10.131:6371,192.168.10.132:6371,192.168.10.133:6371,192.168.10.135:6371,192.168.10.136:6371,192.168.10.137:6371
+      max-redirects: 3
+    timeout: 5000
+    database: 0
+    password: 123456
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+
 
 mybatis:
   mapper-locations: classpath:mapping/*Mapper.xml

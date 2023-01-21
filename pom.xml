@@ -28,8 +28,10 @@
         <mybatis.version>1.3.2</mybatis.version>
         <userAgent>1.21</userAgent>
         <lombok.version>1.18.12</lombok.version>
-        <jedis.version>4.3.0</jedis.version>
+        <jedis.version>3.9.0</jedis.version>
     </properties>
+
+    <!--parent表示本pom文件继承自哪个mavend  项目-->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
