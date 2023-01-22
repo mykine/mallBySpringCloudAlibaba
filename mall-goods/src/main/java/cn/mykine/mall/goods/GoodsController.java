@@ -5,6 +5,13 @@ import cn.mykine.mall.common.dto.GoodsDTO;
 import cn.mykine.mall.common.dto.OrderItemDTO;
 import cn.mykine.mall.common.dto.PageQueryGoodsDTO;
 import cn.mykine.mall.goods.service.IGoodsService;
+import com.sun.org.apache.xalan.internal.extensions.ExpressionContext;
+import org.apache.catalina.core.StandardContext;
+import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -27,6 +34,23 @@ public class GoodsController {
     BaseResponse<GoodsDTO> getGoods(@PathVariable("id") Long id) {
         GoodsDTO goods = goodsService.getGoods(id);
         return BaseResponse.success(goods);
+    }
+
+    /**
+     * el表达式
+     * */
+    @GetMapping("/goods/elexpression/{el}")
+    BaseResponse<String> getGoods(@PathVariable("el") String el) {
+        //解析器
+        ExpressionParser parser = new SpelExpressionParser();
+        //表达式
+        Expression expression = parser.parseExpression("'mall:goods:' + #el");
+        //构建上下文
+        EvaluationContext context = new StandardEvaluationContext();
+        context.setVariable("el",el);
+        //在上下文中求值
+        String res = expression.getValue(context).toString();
+        return BaseResponse.success(res);
     }
 
     @PostMapping("/goods/list")
