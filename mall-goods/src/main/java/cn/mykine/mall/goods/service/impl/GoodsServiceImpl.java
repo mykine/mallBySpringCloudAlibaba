@@ -10,6 +10,7 @@ import cn.mykine.mall.common.exception.BusinessException;
 import cn.mykine.mall.common.util.Assert;
 import cn.mykine.mall.common.util.JSONUtil;
 import cn.mykine.mall.common.util.ObjectTransformer;
+import cn.mykine.mall.goods.aspect.MyCacheable;
 import cn.mykine.mall.goods.mapper.GoodsMapper;
 import cn.mykine.mall.goods.model.GoodsDO;
 import cn.mykine.mall.goods.service.IGoodsService;
@@ -68,23 +69,32 @@ public class GoodsServiceImpl implements IGoodsService {
         return data;
     }
 
+//    @Override
+//    public GoodsDTO getGoods(Long id) {
+//        GoodsDO goodsDO = null;
+//        try {
+//
+//            String cacheKey = String.format(Constants.GOODS_CACHE_KEY, id);
+//            goodsDO = (GoodsDO)redisUtil.get(cacheKey);
+//            logger.info("key:{}, value:{}", cacheKey, goodsDO);
+//
+//            if(null==goodsDO) {
+//                goodsDO = goodsMapper.selectGoodsById(id);
+//                Assert.notNull(goodsDO);
+//                redisUtil.set(cacheKey,goodsDO,300);
+//            }
+//        }catch (Exception e){
+//            logger.warn("GoodsServiceImpl.getGoods err,id={}",id,e);
+//        }
+//        return ObjectTransformer.transform(goodsDO, GoodsDTO.class);
+//    }
+
+
+    @MyCacheable(cacheName = "mall:goods:",key = "#id",expireInSeconds = 300)
     @Override
     public GoodsDTO getGoods(Long id) {
-        GoodsDO goodsDO = null;
-        try {
-
-            String cacheKey = String.format(Constants.GOODS_CACHE_KEY, id);
-            goodsDO = (GoodsDO)redisUtil.get(cacheKey);
-            logger.info("key:{}, value:{}", cacheKey, goodsDO);
-
-            if(null==goodsDO) {
-                goodsDO = goodsMapper.selectGoodsById(id);
-                Assert.notNull(goodsDO);
-                redisUtil.set(cacheKey,goodsDO,300);
-            }
-        }catch (Exception e){
-            logger.warn("GoodsServiceImpl.getGoods err,id={}",id,e);
-        }
+        GoodsDO goodsDO = goodsMapper.selectGoodsById(id);
+        Assert.notNull(goodsDO);
         return ObjectTransformer.transform(goodsDO, GoodsDTO.class);
     }
 
