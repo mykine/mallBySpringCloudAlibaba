@@ -10,6 +10,9 @@ import cn.mykine.mall.user.mapper.UserMapper;
 import cn.mykine.mall.user.model.UserDO;
 import cn.mykine.mall.user.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
@@ -27,30 +30,31 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     JedisHelper jedisHelper;
 
+//    @Override
+//    public UserDTO getUser(Long id) {
+//        String redisKey = "user:"+id;
+//
+//        String userCache = jedisHelper.get(redisKey);
+//        if( userCache != null ){
+//            UserDTO result = JSONUtil.parseObject(userCache,UserDTO.class);
+//            return result;
+//        }
+//
+//        UserDO userDO = userMapper.selectUserById(id);
+//        Assert.notNull(userDO);
+//        UserDTO result = ObjectTransformer.transform(userDO, UserDTO.class);
+//        jedisHelper.set(redisKey,JSONUtil.toJSONString(result),300);
+//        return result;
+//    }
+
+    @Cacheable(cacheNames = "user:",key = "#id")//缓存没有时才会更新
+//    @CacheEvict(cacheNames = "user:",key = "#id")//先删除缓存再更新缓存
+//    @CachePut(cacheNames = "user:",key = "#id")//缓存无论有没有都会更新
     @Override
     public UserDTO getUser(Long id) {
-//        Set<HostAndPort> jedisClusterNodes = new HashSet<HostAndPort>();
-//        jedisClusterNodes.add(new HostAndPort("192.168.10.135", 6371));
-//        jedisClusterNodes.add(new HostAndPort("192.168.10.136", 6371));
-//        jedisClusterNodes.add(new HostAndPort("192.168.10.137", 6371));
-//        jedisClusterNodes.add(new HostAndPort("192.168.10.131", 6371));
-//        jedisClusterNodes.add(new HostAndPort("192.168.10.132", 6371));
-//        jedisClusterNodes.add(new HostAndPort("192.168.10.133", 6371));
-//        JedisCluster jedis = new JedisCluster(jedisClusterNodes, null, "123456");
-
-
-        String redisKey = "user:"+id;
-
-        String userCache = jedisHelper.get(redisKey);
-        if(userCache!=null){
-            UserDTO result = JSONUtil.parseObject(userCache,UserDTO.class);
-            return result;
-        }
-
         UserDO userDO = userMapper.selectUserById(id);
         Assert.notNull(userDO);
         UserDTO result = ObjectTransformer.transform(userDO, UserDTO.class);
-        jedisHelper.set(redisKey,JSONUtil.toJSONString(result),30);
         return result;
     }
 
