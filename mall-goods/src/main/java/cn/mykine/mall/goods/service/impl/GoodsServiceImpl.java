@@ -90,7 +90,7 @@ public class GoodsServiceImpl implements IGoodsService {
 //    }
 
 
-    @MyCacheable(cacheName = "mall:goods:",key = "#id",expireInSeconds = 300)
+    @MyCacheable(cacheName = "mall:goods:",key = "#id",expireInSeconds = 3,waitInSeconds = 2)
     @Override
     public GoodsDTO getGoods(Long id) {
         GoodsDO goodsDO = goodsMapper.selectGoodsById(id);

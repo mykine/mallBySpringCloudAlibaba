@@ -1,6 +1,10 @@
 package cn.mykine.mall.goods.aspect;
 
+import cn.mykine.mall.common.base.ResponseEnum;
+import cn.mykine.mall.common.exception.BusinessException;
 import cn.mykine.mall.goods.utils.RedisUtil;
+import com.google.common.collect.Maps;
+import com.google.common.util.concurrent.RateLimiter;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -9,6 +13,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
@@ -16,6 +21,12 @@ import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+
+import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 自定义缓存切面类
@@ -23,10 +34,36 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @Aspect
+@ConfigurationProperties(prefix = "mycacheable.rate.limit")
 public class MyCacheableAspect {
 
     @Autowired
     private RedisUtil redisUtil;
+
+    public void setMap(Map<String, Double> map) {
+        this.map = map;
+    }
+
+    /**
+     * key - 需要限流的方法
+     * value - 限流速率
+     */
+    private Map<String, Double> map;
+
+    private Map<String, RateLimiter> rateLimiterMap = Maps.newHashMap();
+
+    /**
+     * 切面类创建完成后立即执行的初始化方法
+     * */
+    @PostConstruct
+    public void initRateLimiterMap(){
+            if( !CollectionUtils.isEmpty(map) ){
+                map.forEach((method,permits)->{
+                    RateLimiter rateLimiter = RateLimiter.create(permits);
+                    rateLimiterMap.put(method,rateLimiter);
+                });
+            }
+    }
 
     /**
      * 定义切入点,以标记了MyCacheable注解的方法作为目标对象
@@ -77,7 +114,23 @@ public class MyCacheableAspect {
             return res;
         }
 
-        //缓存为空就执行业务方法,写缓存并返回
+        //单机限流防止缓存雪崩
+        if(null != rateLimiterMap.get(signature.getMethod().getName())){
+            RateLimiter rateLimiter = rateLimiterMap.get(signature.getMethod().getName());
+            if( rateLimiter != null ){
+                if(myCacheable.waitInSeconds()<=0){
+                    //没设置获取令牌桶超时时间时，使用acquire()方法,否则使用tryAcquire()
+                    rateLimiter.acquire();
+                }else {
+                    boolean resTry = rateLimiter.tryAcquire(myCacheable.waitInSeconds(), TimeUnit.SECONDS);
+                    if(!resTry){
+                        throw new BusinessException(ResponseEnum.SYSTEM_BUSY);
+                    }
+                }
+            }
+        }
+
+        //缓存为空就执行业务DB方法,写缓存并返回
         Object value = joinPoint.proceed();
         if( myCacheable.expireInSeconds() <=0 ){
             redisUtil.set(key,value);

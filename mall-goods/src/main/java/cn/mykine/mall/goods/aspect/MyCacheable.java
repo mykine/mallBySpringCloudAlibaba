@@ -29,4 +29,10 @@ public @interface MyCacheable {
      * */
     int expireInSeconds() default 0;
 
+
+    /**
+     * 限流器等待获取令牌桶超时时间
+     * */
+    int waitInSeconds() default 0;
+
 }
