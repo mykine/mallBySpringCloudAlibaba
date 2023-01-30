@@ -5,6 +5,7 @@ import cn.mykine.mall.common.dto.GoodsDTO;
 import cn.mykine.mall.common.dto.OrderItemDTO;
 import cn.mykine.mall.common.dto.PageQueryGoodsDTO;
 import cn.mykine.mall.goods.service.IGoodsService;
+import cn.mykine.mall.goods.service.ITestService;
 import com.sun.org.apache.xalan.internal.extensions.ExpressionContext;
 import org.apache.catalina.core.StandardContext;
 import org.springframework.expression.EvaluationContext;
@@ -23,6 +24,9 @@ public class GoodsController {
 
     @Resource
     private IGoodsService goodsService;
+
+    @Resource
+    private ITestService testService;
 
     @PostMapping("/goods")
     BaseResponse addGoods(@RequestBody GoodsDTO goodsDTO) {
@@ -69,6 +73,12 @@ public class GoodsController {
     BaseResponse checkAndDecreaseStock(@RequestBody List<OrderItemDTO> orderItemDTOList) {
         goodsService.decreaseStock(orderItemDTOList);
         return BaseResponse.success();
+    }
+
+    @GetMapping("/goods/test/bloomfilter/{id}")
+    BaseResponse<String> bloomfilter(@PathVariable("id") Long id) {
+        String res = testService.testBloomFilter(id);
+        return BaseResponse.success(res);
     }
 
 }

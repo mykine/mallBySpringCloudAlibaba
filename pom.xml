@@ -29,6 +29,7 @@
         <userAgent>1.21</userAgent>
         <lombok.version>1.18.12</lombok.version>
         <jedis.version>3.9.0</jedis.version>
+        <guava.version>31.0.1-jre</guava.version>
     </properties>
 
     <!--parent表示本pom文件继承自哪个mavend  项目-->
@@ -102,6 +103,12 @@
                 <groupId>redis.clients</groupId>
                 <artifactId>jedis</artifactId>
                 <version>${jedis.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
