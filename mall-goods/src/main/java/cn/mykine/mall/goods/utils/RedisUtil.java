@@ -542,4 +542,26 @@ public class RedisUtil {
             return 0;
         }
     }
+
+    public boolean setBit(String key,long offset,boolean value,long time){
+        try{
+            boolean res = redisTemplate.opsForValue().setBit(key, offset, value);
+            if(time>0 && res){
+                res = expire(key,time);
+            }
+            return res;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean getBit(String key,long offset){
+        try{
+            boolean res = redisTemplate.opsForValue().getBit(key, offset);
+            return res;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
 }

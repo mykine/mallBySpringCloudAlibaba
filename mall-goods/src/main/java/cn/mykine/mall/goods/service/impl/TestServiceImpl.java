@@ -64,7 +64,8 @@ public class TestServiceImpl implements ITestService {
      * */
     @Override
     public String testBloomFilter(Long id) {
-        boolean res = bloomFilterByGuava(id);
+//        boolean res = bloomFilterByGuava(id);
+        boolean res = bloomFilterByRedisBitmap(id);
         String result = id + (res ? "可能是集合元素" : "不是集合元素");
         return result;
     }
@@ -101,5 +102,44 @@ public class TestServiceImpl implements ITestService {
         return false;
     }
 
+    private static final String BLOOM_FILTER_NAME = "goodsBloomFilter";
+
+    /**
+     * 分布式的布隆过滤器-基于redis的bitmap实现，把bitMap作为布隆过滤器的数组进行操作
+     * */
+    private boolean bloomFilterByRedisBitmap(Long id){
+        String bloomFilterName = "goodsBloomFilter";
+        //数组大小
+        long size = 1000;
+        //初始化布隆过滤器
+        for (long i = 0; i < size; i++) {
+            redisUtil.setBit(bloomFilterName,getOffset(i),true,300);
+        }
+
+        //自测一波准确率
+        int countErr = 0;
+        for (long k = size; k < size*2; k++) {
+            boolean bitRes = redisUtil.getBit(bloomFilterName, getOffset(k));
+            if(bitRes){
+                System.out.println("goodsBloomFilter 误判了,k="+k);
+                countErr++;
+            }
+        }
+        System.out.println("goodsBloomFilter 误判个数:"+countErr);
+
+        //判断元素是否在集合中
+        return redisUtil.getBit(bloomFilterName,getOffset(id));
+    }
+
+    /**
+     * 计算偏移量
+     * */
+    private long getOffset(Long id){
+        String bloomFilterName = BLOOM_FILTER_NAME+id;
+        long hashCode = Math.abs(bloomFilterName.hashCode());
+        long offset = (long) (hashCode % Math.pow(2,32));
+        System.out.println("id="+id+",hashCode="+hashCode+",offset="+offset);
+        return offset;
+    }
 
 }
